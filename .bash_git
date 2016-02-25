@@ -1,0 +1,44 @@
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+cyan=$(tput setaf 6)
+reset=$(tput sgr0)
+bold=$(tput bold)
+
+get_git_begin() {
+	if [[ "$(__git_ps1)" != "" ]]; then
+		echo " "[
+	fi
+}
+
+get_git_end() {
+	if [[ "$(__git_ps1)" != "" ]]; then
+		echo $reset]
+	fi
+}
+
+get_git_branch() {
+	if [[ "$(__git_ps1)" != "" ]]; then
+        branch=$(git branch | grep "\*" | tr -d \*| tr -d ' ')
+        echo $branch
+    fi
+}
+
+get_git_color() {
+    if [[ "$(__git_ps1)" != "" ]]; then
+        status=$(git status)
+          
+        if echo "$status" | egrep -q "nichts zum Commit|nichts zu committen|nothing added to commit|nothing to commit"; then
+            color=$green
+        else
+            color=$red
+        fi
+
+        if echo "$status" | egrep -q "unbeobachtet|untracked|Unbeobachtet|Untracked"; then
+        	color=$bold$color
+        fi
+
+        echo $color
+    fi
+}
+
+export PS1='\u@\h:\w$(get_git_begin)\[$(get_git_color)\]$(get_git_branch)\[$(get_git_end)\]\$ '
