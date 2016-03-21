@@ -32,6 +32,10 @@ check_git() {
 		export GIT_COLOR=$(get_git_color)
 		export GIT_BRANCH=$(get_git_branch)
 		export GIT_PROMPT_END=]
+	else
+		export GIT_PROMPT_BEGIN=''
+		export GIT_BRANCH=''
+		export GIT_PROMPT_END=''
 	fi
 }
 
