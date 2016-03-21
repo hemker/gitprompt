@@ -4,41 +4,36 @@ cyan=$(tput setaf 6)
 reset=$(tput sgr0)
 bold=$(tput bold)
 
-get_git_begin() {
-	if [[ "$(__git_ps1)" != "" ]]; then
-		echo " "[
-	fi
-}
-
-get_git_end() {
-	if [[ "$(__git_ps1)" != "" ]]; then
-		echo $reset]
-	fi
-}
 
 get_git_branch() {
-	if [[ "$(__git_ps1)" != "" ]]; then
-        branch=$(git branch | grep "\*" | tr -d \*| tr -d ' ')
-        echo $branch
-    fi
+    branch=$(git branch | grep "\*" | tr -d \*| tr -d ' ')
+    echo $branch	
 }
 
 get_git_color() {
-    if [[ "$(__git_ps1)" != "" ]]; then
-        status=$(git status)
-          
-        if echo "$status" | egrep -q "nichts zum Commit|nichts zu committen|nothing added to commit|nothing to commit"; then
-            color=$green
-        else
-            color=$red
-        fi
-
-        if echo "$status" | egrep -q "unbeobachtet|untracked|Unbeobachtet|Untracked"; then
-        	color=$bold$color
-        fi
-
-        echo $color
+    status=$(git status)
+      
+    if echo "$status" | egrep -q "nichts zum Commit|nichts zu committen|nothing added to commit|nothing to commit"; then
+        color=$green
+    else
+        color=$red
     fi
+
+    if echo "$status" | egrep -q "unbeobachtet|untracked|Unbeobachtet|Untracked"; then
+    	color=$bold$color
+    fi
+
+    echo $color
 }
 
-export PS1='\u@\h:\w$(get_git_begin)\[$(get_git_color)\]$(get_git_branch)\[$(get_git_end)\]\$ '
+check_git() {
+	if [[ "$(__git_ps1)" != "" ]]; then
+		export GIT_PROMPT_BEGIN=" "[
+		export GIT_COLOR=$(get_git_color)
+		export GIT_BRANCH=$(get_git_branch)
+		export GIT_PROMPT_END=]
+	fi
+}
+
+PROMPT_COMMAND='check_git'
+export PS1='\u@\h:\w$GIT_PROMPT_BEGIN\[$GIT_COLOR\]$GIT_BRANCH\[$reset\]$GIT_PROMPT_END\$ '
