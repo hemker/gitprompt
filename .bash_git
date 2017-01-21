@@ -40,4 +40,10 @@ check_git() {
 }
 
 PROMPT_COMMAND='check_git'
-export PS1='\u@\h:\w$GIT_PROMPT_BEGIN\[$GIT_COLOR\]$GIT_BRANCH\[$reset\]$GIT_PROMPT_END\$ '
+
+if [ "$1" = colored_prompt ]; then
+   export PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]:$GIT_PROMPT_BEGIN\[$GIT_COLOR\]$GIT_BRANCH\[$reset\]$GIT_PROMPT_END\$ '
+else
+   export PS1='\u@\h:\w$GIT_PROMPT_BEGIN\[$GIT_COLOR\]$GIT_BRANCH\[$reset\]$GIT_PROMPT_END\$ '
+fi
+
