@@ -19,7 +19,7 @@ get_git_color() {
         color=$red
     fi
 
-    if echo "$status" | egrep -q "unbeobachtet|untracked|Unbeobachtet|Untracked"; then
+    if echo "$status" | egrep -q "unbeobachtet|untracked|Unbeobachtet|Untracked|Unversioniert|Unversioned"; then
     	color=$bold$color
     fi
 
